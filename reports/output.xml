@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.1.1 (Python 3.10.12 on linux)" generated="20231117 15:12:03.840" rpa="false" schemaversion="4">
+<suite id="s1" name="Backend" source="/home/elviojardini/repositorios/robot-framework/tests/backend/backend.robot">
+<test id="s1-t1" name="Get a Valid CEP" line="13">
+<kw name="Create Session Http Request">
+<arg>14405415</arg>
+<kw name="Create Session" library="RequestsLibrary">
+<arg>get_cep</arg>
+<arg>https://viacep.com.br/ws/${QUERY_CEP}/json/</arg>
+<arg>verify=true</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20231117 15:12:04.062" level="INFO">Creating Session using : alias=get_cep, url=https://viacep.com.br/ws/14405415/json/, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
+<status status="PASS" starttime="20231117 15:12:04.062" endtime="20231117 15:12:04.063"/>
+</kw>
+<status status="PASS" starttime="20231117 15:12:04.061" endtime="20231117 15:12:04.063"/>
+</kw>
+<kw name="Get File" library="OperatingSystem">
+<var>${schema}</var>
+<arg>./helpers/backend/via_cep_schema.json</arg>
+<doc>Returns the contents of a specified file.</doc>
+<msg timestamp="20231117 15:12:04.063" level="INFO" html="true">Getting file '&lt;a href="file:///home/elviojardini/repositorios/robot-framework/helpers/backend/via_cep_schema.json"&gt;/home/elviojardini/repositorios/robot-framework/helpers/backend/via_cep_schema.json&lt;/a&gt;'.</msg>
+<msg timestamp="20231117 15:12:04.063" level="INFO">${schema} = {
+    "type": "object",
+    "properties": {
+      "cep": {
+        "type": "string"
+      },
+      "logradouro": {
+        "type": "string"
+      },
+      "complemento": {
+        "type": "string"
+   ...</msg>
+<status status="PASS" starttime="20231117 15:12:04.063" endtime="20231117 15:12:04.063"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${schema}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20231117 15:12:04.064" level="INFO">{
+    "type": "object",
+    "properties": {
+      "cep": {
+        "type": "string"
+      },
+      "logradouro": {
+        "type": "string"
+      },
+      "complemento": {
+        "type": "string"
+      },
+      "bairro": {
+        "type": "string"
+      },
+      "localidade": {
+        "type": "string"
+      },
+      "uf": {
+        "type": "string"
+      },
+      "ibge": {
+        "type": "string"
+      },
+      "gia": {
+        "type": "string"
+      },
+      "ddd": {
+        "type": "string"
+      },
+      "siafi": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "cep",
+      "logradouro",
+      "complemento",
+      "bairro",
+      "localidade",
+      "uf",
+      "ibge",
+      "gia",
+      "ddd",
+      "siafi"
+    ]
+  }</msg>
+<status status="PASS" starttime="20231117 15:12:04.063" endtime="20231117 15:12:04.064"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${api_response}</var>
+<arg>get_cep</arg>
+<arg>/</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20231117 15:12:04.626" level="INFO">GET Request : url=https://viacep.com.br/ws/14405415/json/ 
+ path_url=/ws/14405415/json/ 
+ headers={'User-Agent': 'python-requests/2.31.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20231117 15:12:04.626" level="INFO">GET Response : url=https://viacep.com.br/ws/14405415/json/ 
+ status=200, reason=OK 
+ headers={'Server': 'nginx/1.22.0', 'Date': 'Fri, 17 Nov 2023 18:11:33 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Expires': 'Fri, 17 Nov 2023 19:11:33 GMT', 'Cache-Control': 'max-age=3600, public', 'Pragma': 'public', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET', 'Access-Control-Allow-Headers': 'Content-Type, X-Request-With, X-Requested-By', 'Access-Control-Allow-Credentials': 'true', 'Access-Control-Max-Age': '86400'} 
+ body={
+  "cep": "14405-415",
+  "logradouro": "Rua Hipólito Antônio Pinheiro",
+  "complemento": "",
+  "bairro": "Jardim Integração",
+  "localidade": "Franca",
+  "uf": "SP",
+  "ibge": "3516200",
+  "gia": "3104",
+  "ddd": "16",
+  "siafi": "6425"
+} 
+ </msg>
+<msg timestamp="20231117 15:12:04.627" level="INFO">${api_response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20231117 15:12:04.064" endtime="20231117 15:12:04.627"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20231117 15:12:04.627" endtime="20231117 15:12:04.627"/>
+</kw>
+<kw name="Validate Jsonschema From File" library="JsonValidator">
+<arg>${api_response.json()}</arg>
+<arg>./helpers/backend/via_cep_schema.json</arg>
+<doc>Validate JSON according to schema, loaded from a file.</doc>
+<status status="PASS" starttime="20231117 15:12:04.627" endtime="20231117 15:12:04.668"/>
+</kw>
+<status status="PASS" starttime="20231117 15:12:04.061" endtime="20231117 15:12:04.668"/>
+</test>
+<test id="s1-t2" name="Get a Invalid CEP" line="21">
+<kw name="Create Session Http Request">
+<arg>99999999</arg>
+<kw name="Create Session" library="RequestsLibrary">
+<arg>get_cep</arg>
+<arg>https://viacep.com.br/ws/${QUERY_CEP}/json/</arg>
+<arg>verify=true</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20231117 15:12:04.670" level="INFO">Creating Session using : alias=get_cep, url=https://viacep.com.br/ws/99999999/json/, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
+<status status="PASS" starttime="20231117 15:12:04.669" endtime="20231117 15:12:04.670"/>
+</kw>
+<status status="PASS" starttime="20231117 15:12:04.669" endtime="20231117 15:12:04.670"/>
+</kw>
+<kw name="GET On Session" library="RequestsLibrary">
+<var>${api_response}</var>
+<arg>get_cep</arg>
+<arg>/</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<msg timestamp="20231117 15:12:05.170" level="INFO">GET Request : url=https://viacep.com.br/ws/99999999/json/ 
+ path_url=/ws/99999999/json/ 
+ headers={'User-Agent': 'python-requests/2.31.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20231117 15:12:05.170" level="INFO">GET Response : url=https://viacep.com.br/ws/99999999/json/ 
+ status=200, reason=OK 
+ headers={'Server': 'nginx/1.22.0', 'Date': 'Fri, 17 Nov 2023 18:11:33 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Expires': 'Fri, 17 Nov 2023 19:11:33 GMT', 'Cache-Control': 'max-age=3600, public', 'Pragma': 'public', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET', 'Access-Control-Allow-Headers': 'Content-Type, X-Request-With, X-Requested-By', 'Access-Control-Allow-Credentials': 'true', 'Access-Control-Max-Age': '86400'} 
+ body={
+  "erro": true
+} 
+ </msg>
+<msg timestamp="20231117 15:12:05.170" level="INFO">${api_response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20231117 15:12:04.670" endtime="20231117 15:12:05.170"/>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<arg>200</arg>
+<doc>Fails if response status code is different than the expected.</doc>
+<status status="PASS" starttime="20231117 15:12:05.170" endtime="20231117 15:12:05.171"/>
+</kw>
+<kw name="Validate Jsonschema From File" library="JsonValidator">
+<arg>${api_response.json()}</arg>
+<arg>./helpers/backend/via_cep_schema_error.json</arg>
+<doc>Validate JSON according to schema, loaded from a file.</doc>
+<status status="PASS" starttime="20231117 15:12:05.171" endtime="20231117 15:12:05.179"/>
+</kw>
+<status status="PASS" starttime="20231117 15:12:04.668" endtime="20231117 15:12:05.179"/>
+</test>
+<status status="PASS" starttime="20231117 15:12:03.842" endtime="20231117 15:12:05.180"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="2" fail="0" skip="0" id="s1" name="Backend">Backend</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

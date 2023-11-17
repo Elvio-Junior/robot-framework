@@ -1,0 +1,6 @@
+robotframework==6.1.1
+robotframework-seleniumlibrary==6.1.1
+webdrivermanager==0.10.0
+robotframework-appiumlibrary==2.0.0
+robotframework-requests==0.9.5
+robotframework-jsonvalidator==2.0.0
